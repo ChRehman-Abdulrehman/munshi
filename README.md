@@ -7,6 +7,8 @@ and turns the bahi into shop intelligence.
 > Built for **NYP AI Hackathon 2026** under the theme _"Build AI for Real-World Impact"_
 > (productivity / community development / digital literacy).
 >
+> **Live demo:** https://munshi-hiii14.vercel.app
+>
 > Demo: on the login screen tap **“Demo dekhein — Ali Cloth House”** to load a full 30-day demo shop.
 
 ---

@@ -9,7 +9,7 @@
 | **Team Members** | Muhammad Abdulrehman (Team Lead) — chr142365@gmail.com · Asifa Arooj — asifaarooj81@gmail.com · Maira Khan — mairakhan7833@gmail.com · Muhammad Taha — 2muhammadtaha2@gmail.com · Laiba Tahir — laibatahir10999@gmail.com |
 | **Problem Statement** | Small Pakistani retailers run on paper udhaar khata: lost credit entries, no visibility, English-only software, no credit limits. |
 | **Solution Overview** | Voice-first PWA: shopkeeper speaks Roman Urdu/Urdu/English, Munshi turns it into a structured khata entry (auto price from stock), answers shop questions with grounded numbers, enforces credit limits, works offline. |
-| **Live Demo URL** | _[fill after deploy — e.g. Vercel URL]_ |
+| **Live Demo URL** | https://munshi-hiii14.vercel.app |
 | **GitHub Repository URL** | https://github.com/ChRehman-Abdulrehman/munshi |
 | **Demo Video URL** | _[fill after recording]_ |
 | **AI Tools Used** | Groq API — `openai/gpt-oss-120b` (entry parsing), `openai/gpt-oss-20b` (assistant answers / romanization), `whisper-large-v3` (voice transcription); Google Gemini API (optional LLM fallback); tesseract.js (on-device OCR); Web Speech API (on-device STT). |
@@ -70,7 +70,7 @@ when online and configured, PBKDF2 password hashing.
 ## Pre-submission checklist
 
 - [x] `git init` + first commit (honest history, no backdating) → push to **public** GitHub repo
-- [ ] Deploy to Vercel → set `GROQ_API_KEY` env var → test live demo URL end-to-end
+- [x] Deploy to Vercel → set `GROQ_API_KEY` env var → test live demo URL end-to-end
 - [ ] Capture screenshots into `docs/screenshots/` (see folder README)
 - [ ] Record 60–90s demo video (script above) → upload (YouTube unlisted / Drive link)
 - [ ] Fill the template table above (team name, URLs) and the official submission form
