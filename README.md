@@ -220,7 +220,7 @@ text needed for the request is sent. API keys live server-side in env vars, neve
 - Local mode is single-device (browser storage); multi-device/roles come with Supabase mode.
 - Free-tier LLM rate limits apply during heavy live demos.
 
-## Team — Digital Achievers (5 members)
+## Team — Logicdev.AI (5 members)
 
 | Member | Email | Contribution |
 | --- | --- | --- |
