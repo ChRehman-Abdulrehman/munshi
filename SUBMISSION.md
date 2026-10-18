@@ -10,7 +10,7 @@
 | **Problem Statement** | Small Pakistani retailers run on paper udhaar khata: lost credit entries, no visibility, English-only software, no credit limits. |
 | **Solution Overview** | Voice-first PWA: shopkeeper speaks Roman Urdu/Urdu/English, Munshi turns it into a structured khata entry (auto price from stock), answers shop questions with grounded numbers, enforces credit limits, works offline. |
 | **Live Demo URL** | _[fill after deploy — e.g. Vercel URL]_ |
-| **GitHub Repository URL** | _[fill after repo push]_ |
+| **GitHub Repository URL** | https://github.com/ChRehman-Abdulrehman/munshi |
 | **Demo Video URL** | _[fill after recording]_ |
 | **AI Tools Used** | Groq API — `openai/gpt-oss-120b` (entry parsing), `openai/gpt-oss-20b` (assistant answers / romanization), `whisper-large-v3` (voice transcription); Google Gemini API (optional LLM fallback); tesseract.js (on-device OCR); Web Speech API (on-device STT). |
 
@@ -69,7 +69,7 @@ when online and configured, PBKDF2 password hashing.
 
 ## Pre-submission checklist
 
-- [ ] `git init` + first commit (honest history, no backdating) → push to **public** GitHub repo
+- [x] `git init` + first commit (honest history, no backdating) → push to **public** GitHub repo
 - [ ] Deploy to Vercel → set `GROQ_API_KEY` env var → test live demo URL end-to-end
 - [ ] Capture screenshots into `docs/screenshots/` (see folder README)
 - [ ] Record 60–90s demo video (script above) → upload (YouTube unlisted / Drive link)
