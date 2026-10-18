@@ -465,6 +465,10 @@ export const STR: Dict = {
   st_copied: { roman: "Payment number copy ho gaya.", ur: "پیمنٹ نمبر کاپی ہو گیا۔", en: "Payment number copied." },
   st_demo_loaded: { roman: "Demo data load ho gaya — Ali Cloth House.", ur: "ڈیمو ڈیٹا لوڈ ہو گیا — علی کلاتھ ہاؤس۔", en: "Demo data loaded — Ali Cloth House." },
   st_perm_warn: { roman: "Permission nahi mili — browser settings se on karein.", ur: "اجازت نہیں ملی — براؤزر سیٹنگز سے آن کریں۔", en: "Permission not granted — enable it in browser settings." },
+  st_notif_on_note: { roman: "Notifications on ho gaye — zaroori baat par hum batayenge.", ur: "اطلاعات آن ہو گئیں — ضروری بات پر ہم بتائیں گے۔", en: "Notifications are on — we'll alert you about important things." },
+  st_notif_on_toast: { roman: "Notifications on ho gaye.", ur: "اطلاعات آن ہو گئیں۔", en: "Notifications enabled." },
+  st_notif_no_support: { roman: "Is browser mein notifications support nahi.", ur: "اس براؤزر میں اطلاعات کی سہولت نہیں ہے۔", en: "This browser doesn't support notifications." },
+  al_all: { roman: "Sab", ur: "سب", en: "All" },
   st_new_member: { roman: "Naya member", ur: "نیا ممبر", en: "New member" },
   st_member_added: { roman: "Naya member add ho gaya.", ur: "نیا ممبر شامل ہو گیا۔", en: "New member added." },
   st_member_form_warn: { roman: "Naam aur 4-hindse ka PIN likhein.", ur: "نام اور 4 ہندسوں کا پن لکھیں۔", en: "Enter a name and a 4+ digit PIN." },
@@ -500,6 +504,83 @@ export function saleStatusLabel(s: string, lang: Lang): string {
 export function custBadgeLabel(b: string, lang: Lang): string {
   const map: Record<string, string> = { Safe: "ss_safe", "Near limit": "ss_near", Blocked: "ss_blocked" };
   return t(map[b] ?? b, lang);
+}
+
+type AlertText = { title: string; message: string; actionLabel?: string | null };
+
+const ALERT_STATUS: Record<string, { en: string; ur: string }> = {
+  ordered: { en: "ordered", ur: "آرڈر ہو گیا" },
+  arrived: { en: "arrived", ur: "پہنچ گیا" },
+  customer_notified: { en: "customer notified", ur: "گاہک کو بتا دیا" },
+};
+
+const ALERT_ACTION: Record<"en" | "ur", Record<string, string>> = {
+  en: {
+    "Customer dekhein": "View customer",
+    "Khata kholein": "Open khata",
+    "Mangwane ki list mein daalo": "Add to restock list",
+    "Stock dekhein": "View stock",
+  },
+  ur: {
+    "Customer dekhein": "گاہک دیکھیں",
+    "Khata kholein": "کھاتا کھولیں",
+    "Mangwane ki list mein daalo": "منگوانے کی فہرست میں ڈالیں",
+    "Stock dekhein": "اسٹاک دیکھیں",
+  },
+};
+
+const ALERT_TEXT: Record<"en" | "ur", { title: [RegExp, string][]; message: [RegExp, string][] }> = {
+  en: {
+    title: [
+      [/^(.+) limit ke qareeb$/, "$1 is near the limit"],
+      [/^(.+) ne payment ki$/, "$1 made a payment"],
+      [/^(.+) garam ho gaya!$/, "$1 is trending!"],
+      [/^Mangwana update$/, "Arrival update"],
+    ],
+    message: [
+      [/^Balance Rs (.+) ho gaya — limit Rs (.+) ka (.+)%\.$/, "Balance reached Rs $1 — $3% of the Rs $2 limit."],
+      [/^Ab dobara udhaar de sakte hain\. Naya balance Rs (.+)\.$/, "You can give credit again. New balance Rs $1."],
+      [/^Is hafte (.+) bik gaye — stock sirf (.+) bacha hai\.$/, "$1 sold this week — only $2 left in stock."],
+      [/^Is hafte (.+) bik gaye\.$/, "$1 sold this week."],
+    ],
+  },
+  ur: {
+    title: [
+      [/^(.+) limit ke qareeb$/, "$1 حد کے قریب"],
+      [/^(.+) ne payment ki$/, "$1 نے ادائیگی کی"],
+      [/^(.+) garam ho gaya!$/, "$1 بک رہا ہے!"],
+      [/^Mangwana update$/, "آمد اپڈیٹ"],
+    ],
+    message: [
+      [/^Balance Rs (.+) ho gaya — limit Rs (.+) ka (.+)%\.$/, "بیلنس Rs $1 ہو گیا — Rs $2 کی حد کا $3%۔"],
+      [/^Ab dobara udhaar de sakte hain\. Naya balance Rs (.+)\.$/, "اب دوبارہ ادھار دے سکتے ہیں۔ نیا بیلنس Rs $1۔"],
+      [/^Is hafte (.+) bik gaye — stock sirf (.+) bacha hai\.$/, "اس ہفتے $1 بکے — اسٹاک میں صرف $2 بچا ہے۔"],
+      [/^Is hafte (.+) bik gaye\.$/, "اس ہفتے $1 بکے۔"],
+    ],
+  },
+};
+
+export function localizeAlert(a: AlertText, lang: Lang): AlertText {
+  if (lang === "roman") return a;
+  const T = ALERT_TEXT[lang];
+  let title = a.title;
+  for (const [re, rep] of T.title) {
+    if (re.test(title)) {
+      title = title.replace(re, rep);
+      break;
+    }
+  }
+  let message = a.message;
+  for (const [re, rep] of T.message) {
+    if (re.test(message)) {
+      message = message.replace(re, rep);
+      break;
+    }
+  }
+  const st = /^(.+) — status: ([a-z_]+)$/.exec(message);
+  if (st && ALERT_STATUS[st[2]]) message = `${st[1]} — status: ${ALERT_STATUS[st[2]][lang]}`;
+  const actionLabel = a.actionLabel ? ALERT_ACTION[lang][a.actionLabel] ?? a.actionLabel : a.actionLabel;
+  return { title, message, actionLabel };
 }
 
 export const LANGS: { value: Lang; label: string }[] = [

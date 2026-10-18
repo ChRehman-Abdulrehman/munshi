@@ -250,10 +250,10 @@ export default function SettingsPage() {
     const perm = await requestWebPushPermission();
     setPushPerm(perm);
     if (perm === "granted") {
-      showLocalNotification("Munshi", "Notifications on ho gaye — zaroori baat par hum batayenge.");
-      toast.push("success", "Notifications on ho gaye.");
+      showLocalNotification("Munshi", t("st_notif_on_note"));
+      toast.push("success", t("st_notif_on_toast"));
     } else if (perm === "unsupported") {
-      toast.push("warning", "Is browser mein notifications support nahi.");
+      toast.push("warning", t("st_notif_no_support"));
     } else {
       toast.push("warning", t("st_perm_warn"));
     }

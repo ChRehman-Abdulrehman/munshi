@@ -70,7 +70,9 @@ export async function POST(req: Request) {
   fd.append("temperature", "0");
   fd.append("prompt", ROMAN_BIAS);
   const langHint = form.get("language");
-  if (typeof langHint === "string" && /^[a-z]{2}(-[A-Z]{2})?$/.test(langHint)) fd.append("language", langHint);
+  if (typeof langHint === "string" && /^[a-z]{2}(-[A-Z]{2})?$/.test(langHint)) {
+    fd.append("language", langHint.split("-")[0]);
+  }
 
   let res: Response;
   try {

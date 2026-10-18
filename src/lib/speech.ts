@@ -135,12 +135,14 @@ export class WhisperSession {
   private stream: MediaStream | null = null;
   private chunks: Blob[] = [];
   private cb: SpeechCallbacks | null = null;
+  private lang: Lang = "roman";
   private timer: ReturnType<typeof setTimeout> | null = null;
   private cancelled = false;
   active = false;
 
-  start(_lang: Lang, cb: SpeechCallbacks): void {
+  start(lang: Lang, cb: SpeechCallbacks): void {
     this.cb = cb;
+    this.lang = lang;
     this.cancelled = false;
     if (!recorderSupported()) {
       cb.onError("Is browser mein recording support nahi hai. Neeche likh kar bhejein.");
@@ -208,7 +210,7 @@ export class WhisperSession {
     try {
       const fd = new FormData();
       fd.append("audio", new File([blob], "voice.webm", { type: blob.type || "audio/webm" }));
-      fd.append("language", "ur-PK");
+      fd.append("language", this.lang === "en" ? "en-US" : "ur-PK");
       const res = await fetch("/api/transcribe", { method: "POST", body: fd });
       if (res.status === 501) {
         markWhisperBroken();

@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useApp } from "@/components/providers";
 import { relTime } from "@/lib/format";
+import { localizeAlert } from "@/lib/i18n";
 import { Badge } from "@/components/ui/badge";
 import { Chip, EmptyState } from "@/components/ui/bits";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,7 @@ export default function AlertsPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-black">Alerts</h1>
+          <h1 className="text-xl font-black">{t("alerts")}</h1>
           <p className="text-sm text-muted">{t("al_sub")}</p>
         </div>
         {alerts.some((a) => !a.read_at) && (
@@ -58,7 +59,7 @@ export default function AlertsPage() {
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-        <Chip active={filter === "all"} onClick={() => setFilter("all")}>Sab</Chip>
+        <Chip active={filter === "all"} onClick={() => setFilter("all")}>{t("al_all")}</Chip>
         <Chip active={filter === "unread"} onClick={() => setFilter("unread")}>{t("al_new")}</Chip>
         <Chip active={filter === "critical"} onClick={() => setFilter("critical")}>{t("al_critical")}</Chip>
         <Chip active={filter === "resolved"} onClick={() => setFilter("resolved")}>{t("al_resolved_f")}</Chip>
@@ -68,21 +69,23 @@ export default function AlertsPage() {
         <EmptyState icon={<Bell size={28} />} line={t("al_empty")} />
       ) : (
         <div className="space-y-2">
-          {list.map((a) => (
+          {list.map((a) => {
+            const loc = localizeAlert({ title: a.title, message: a.message, actionLabel: a.action?.label }, lang);
+            return (
             <div key={a.id} className={`card p-4 ${!a.read_at && !a.resolved_at ? "border-l-4 border-l-primary" : ""} ${a.resolved_at ? "opacity-60" : ""}`}>
               <div className="flex items-start gap-3">
                 <span className="text-lg" aria-hidden>{SEVERITY_ICON[a.severity] ?? "🟢"}</span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="min-w-0 flex-1 text-[15px] font-bold">{a.title}</p>
+                    <p className="min-w-0 flex-1 text-[15px] font-bold">{loc.title}</p>
                     {a.severity === "critical" && !a.resolved_at && <Badge tone="red">{t("al_critical")}</Badge>}
                   </div>
-                  <p className="mt-0.5 text-[14px] text-muted">{a.message}</p>
+                  <p className="mt-0.5 text-[14px] text-muted">{loc.message}</p>
                   <p className="mt-1 text-[11px] text-muted">{relTime(a.created_at, lang)}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     {a.action && (
                       <Link href={a.action.href} className="press rounded-xl bg-primary px-3 py-1.5 text-[13px] font-bold text-white">
-                        {a.action.label}
+                        {loc.actionLabel}
                       </Link>
                     )}
                     {!a.resolved_at && (
@@ -102,7 +105,8 @@ export default function AlertsPage() {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
