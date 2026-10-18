@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | **Project Name** | Munshi — Bolo, likho, poochho |
-| **Team Name** | Digital Achievers |
+| **Team Name** | Logicdev.AI |
 | **Team Members** | Muhammad Abdulrehman (Team Lead) — chr142365@gmail.com · Asifa Arooj — asifaarooj81@gmail.com · Maira Khan — mairakhan7833@gmail.com · Muhammad Taha — 2muhammadtaha2@gmail.com · Laiba Tahir — laibatahir10999@gmail.com |
 | **Problem Statement** | Small Pakistani retailers run on paper udhaar khata: lost credit entries, no visibility, English-only software, no credit limits. |
 | **Solution Overview** | Voice-first PWA: shopkeeper speaks Roman Urdu/Urdu/English, Munshi turns it into a structured khata entry (auto price from stock), answers shop questions with grounded numbers, enforces credit limits, works offline. |
