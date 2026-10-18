@@ -220,10 +220,17 @@ text needed for the request is sent. API keys live server-side in env vars, neve
 - Local mode is single-device (browser storage); multi-device/roles come with Supabase mode.
 - Free-tier LLM rate limits apply during heavy live demos.
 
-## Team
+## Team — Digital Achievers (5 members)
 
-- **[Your Name]** — solo developer: product design, parser/ledger/AI integration, UI (3 languages),
-  tests and documentation. (_Update with final team details if more members join._)
+| Member | Email | Contribution |
+| --- | --- | --- |
+| **Muhammad Abdulrehman** (Team Lead) | chr142365@gmail.com | Problem research, product design, ledger/credit core, AI integration (Groq/Whisper), final QA & submission |
+| Asifa Arooj | asifaarooj81@gmail.com | Roman Urdu/Urdu copywriting, 3-language UI (i18n) review, usability testing |
+| Maira Khan | mairakhan7833@gmail.com | UI/UX design, screenshots & visual testing, test scenarios |
+| Muhammad Taha | 2muhammadtaha2@gmail.com | Parser & voice test cases, end-to-end testing, demo data |
+| Laiba Tahir | laibatahir10999@gmail.com | Documentation (README/submission), demo video planning & narration |
+
+<!-- TODO (team): adjust each contribution line to match the actual work done before final submission. -->
 
 ## License
 
