@@ -117,7 +117,7 @@ export class LocalRepo implements Repo {
           return { shop, member };
         }
       }
-      throw new Error("PIN/password galat hai. Dobara koshish karein.");
+      throw new Error("PIN/password galat hai. Demo ke liye 1234 likhein ya 'Demo dekhein' dabayen.");
     }
     const now = new Date().toISOString();
     const shopId = uuid();

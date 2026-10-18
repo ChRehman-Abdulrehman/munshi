@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { getRepo } from "@/lib/repo";
 import { Button } from "@/components/ui/button";
-import { Input, Label } from "@/components/ui/input";
+import { Input, Label, PasswordInput } from "@/components/ui/input";
 import { BrandBlock } from "@/components/BrandBlock";
 import { useToast } from "@/components/ui/toast";
 import { getStoredLang, t as tr } from "@/lib/i18n";
@@ -98,19 +98,18 @@ export default function LoginPage() {
           </div>
           <div>
             <Label htmlFor="login-pin">{t("login_pin")}</Label>
-            <Input
+            <PasswordInput
               id="login-pin"
               value={pin}
               onChange={(e) => setPin(e.target.value.slice(0, 64))}
               placeholder={t("login_pin_ph")}
-              type="password"
               autoComplete="current-password"
             />
           </div>
           {isNewShop && (
             <div>
               <Label htmlFor="login-pin2">{t("login_pin2")}</Label>
-              <Input id="login-pin2" value={pin2} onChange={(e) => setPin2(e.target.value.slice(0, 64))} type="password" autoComplete="new-password" />
+              <PasswordInput id="login-pin2" value={pin2} onChange={(e) => setPin2(e.target.value.slice(0, 64))} autoComplete="new-password" />
             </div>
           )}
           <Button className="w-full" onClick={doLogin} disabled={busy !== null}>

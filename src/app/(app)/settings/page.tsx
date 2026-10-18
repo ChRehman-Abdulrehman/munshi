@@ -4,7 +4,7 @@ import * as React from "react";
 import { useApp } from "@/components/providers";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
-import { Input, Label } from "@/components/ui/input";
+import { Input, Label, PasswordInput } from "@/components/ui/input";
 import { BottomSheet } from "@/components/ui/sheet";
 import { Chip } from "@/components/ui/bits";
 import { Badge } from "@/components/ui/badge";
@@ -331,9 +331,8 @@ export default function SettingsPage() {
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
             <Label htmlFor="pw-current">{t("sec_current")}</Label>
-            <Input
+            <PasswordInput
               id="pw-current"
-              type="password"
               value={curSecret}
               onChange={(e) => setCurSecret(e.target.value)}
               placeholder={passwordOn ? "Aa1!…" : "1234"}
@@ -342,11 +341,11 @@ export default function SettingsPage() {
           </div>
           <div>
             <Label htmlFor="pw-new">{t("sec_new")}</Label>
-            <Input id="pw-new" type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} autoComplete="new-password" />
+            <PasswordInput id="pw-new" value={newPw} onChange={(e) => setNewPw(e.target.value)} autoComplete="new-password" />
           </div>
           <div>
             <Label htmlFor="pw-new2">{t("sec_confirm")}</Label>
-            <Input id="pw-new2" type="password" value={newPw2} onChange={(e) => setNewPw2(e.target.value)} autoComplete="new-password" />
+            <PasswordInput id="pw-new2" value={newPw2} onChange={(e) => setNewPw2(e.target.value)} autoComplete="new-password" />
           </div>
         </div>
         <PasswordChecklist password={newPw} lang={lang} />
@@ -573,7 +572,7 @@ function AddMemberForm({ onDone, onError }: { onDone: () => void; onError: (m: s
         </div>
         <div>
           <Label htmlFor="m-pin">{t("st_pin_label")}</Label>
-          <Input id="m-pin" value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))} inputMode="numeric" type="password" />
+          <PasswordInput id="m-pin" value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))} inputMode="numeric" />
         </div>
       </div>
       <div className="flex gap-2">
