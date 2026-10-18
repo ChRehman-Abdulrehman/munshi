@@ -24,24 +24,6 @@
 
 ---
 
-## Demo video script (60–90 seconds)
-
-| Time | Shot | Voice-over (suggested) |
-| --- | --- | --- |
-| 0–10s | Login screen → Demo button | "Pakistani dukaan ka udhaar khata aaj bhi kaghaz pe hai. Munshi isko bol kar chalata hai." |
-| 10–30s | Munshi page: tap mic, speak "Ali ko 2 lawn suit udhaar likh do" → review card shows item, qty, **auto price** → confirm | "Bolo, aur entry khud ban jati hai — stock se rate bhi khud aa jata hai. Save se pehle hamesha review." |
-| 30–45s | Type "Ali Raza ko 1 suit udhaar" (duplicate name) → Munshi asks last 4 digits → enter → correct khata. Then try entry that crosses credit limit → blocked | "Do log same naam ke? Munshi phone ke aakhri 4 hindson se sahi khata pakarta hai. Credit limit par AI bypass nahi kar sakta." |
-| 45–60s | Assistant panel: ask "Aaj ka hisaab suna do" (spoken answer). Open statement share link with QR | "Har sawal ka jawab sirf hisaab se — numbers kahin se invent nahi hote." |
-| 60–75s | English/Urdu language switch; offline toggle; receipt scan | "Teen zabanein, offline bhi chalta hai, receipt scan bhi on-device." |
-| 75–90s | README/architecture flash + logo | "Rules parser + LLM enhancement + Whisper — aur har likhai se pehle owner ka confirm. Munshi: bolo, likho, poochho." |
-
-Recording tips:
-- Record mobile view (devtools device toolbar or a real phone), portrait.
-- Keep one browser tab only, network on (Groq) for LLM parts; show mic permission allowed.
-- 720p+ screen recording is enough; no need to show your face.
-
----
-
 ## Judge Q&A preparation (technical questions)
 
 **Q: Where exactly is AI used?**
@@ -71,8 +53,8 @@ when online and configured, PBKDF2 password hashing.
 
 - [x] `git init` + first commit (honest history, no backdating) → push to **public** GitHub repo
 - [x] Deploy to Vercel → set `GROQ_API_KEY` env var → test live demo URL end-to-end
-- [ ] Capture screenshots into `docs/screenshots/` (see folder README)
-- [ ] Record 60–90s demo video (script above) → upload (YouTube unlisted / Drive link)
+- [x] Capture screenshots into `docs/screenshots/`
+- [ ] Record 60–90s demo video → upload (YouTube unlisted / Drive link)
 - [ ] Fill the template table above (team name, URLs) and the official submission form
 - [ ] Verify: `.env.local` NOT in repo, README complete, live link works in incognito
 - [ ] Send judges repo access (public, or add them if private) before the deadline
