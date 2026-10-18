@@ -31,9 +31,7 @@ export default function LoginPage() {
     setBusy("demo");
     try {
       const repo = await getRepo();
-      await repo.signIn({ name: "Demo Owner", pin: "1234", shopName: "Ali Cloth House" });
       await repo.setDemoMode(true);
-      await repo.seedDemo();
       router.replace("/");
     } catch (e) {
       toast.push("error", e instanceof Error ? e.message : t("login_err_generic"));

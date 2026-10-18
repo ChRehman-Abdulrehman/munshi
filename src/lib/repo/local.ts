@@ -87,14 +87,37 @@ export class LocalRepo implements Repo {
 
   async signIn(input: { name: string; pin: string; shopName?: string }): Promise<Session> {
     const d = await this.db();
-    let session = await this.getSession();
-    if (session) {
+    const shops: Shop[] = await d.getAll("shops");
+    const members: Member[] = await d.getAll("members");
+    if (shops.length) {
       if (!input.pin) throw new Error("PIN ya password likhein.");
-      const ok = hasPassword(session.shop)
-        ? await verifyPassword(input.pin, session.shop.settings.password_hash!, session.shop.settings.password_salt!)
-        : (await sha256Hex(input.pin)) === session.member.user_id;
-      if (!ok) throw new Error("PIN/password galat hai. Dobara koshish karein.");
-      return session;
+      const session = await this.getSession();
+      const ordered = session
+        ? [session.shop, ...shops.filter((s) => s.id !== session.shop.id)]
+        : shops;
+      const matchOwner = async (shop: Shop): Promise<Member | null> => {
+        const shopMembers = members.filter((m) => m.shop_id === shop.id);
+        const list =
+          session && session.shop.id === shop.id && shopMembers.some((m) => m.id === session.member.id)
+            ? [session.member, ...shopMembers.filter((m) => m.id !== session.member.id)]
+            : shopMembers;
+        for (const member of list) {
+          if (shop.is_demo && input.pin === "1234") return member;
+          const ok = hasPassword(shop)
+            ? await verifyPassword(input.pin, shop.settings.password_hash!, shop.settings.password_salt!)
+            : (await sha256Hex(input.pin)) === member.user_id;
+          if (ok) return member;
+        }
+        return null;
+      };
+      for (const shop of ordered) {
+        const member = await matchOwner(shop);
+        if (member) {
+          await this.setMeta("session", { shop_id: shop.id, member_id: member.id });
+          return { shop, member };
+        }
+      }
+      throw new Error("PIN/password galat hai. Dobara koshish karein.");
     }
     const now = new Date().toISOString();
     const shopId = uuid();
