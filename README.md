@@ -187,16 +187,21 @@ Server extras (all optional): `SUPABASE_SERVICE_ROLE_KEY` (cron/export/share API
 
 ## Screenshots
 
-> Add app captures to `docs/screenshots/` and reference them here before submission.
+| Login — 3 languages + demo shop | Home — dashboard |
+| --- | --- |
+| ![Login](docs/screenshots/login.png) | ![Home](docs/screenshots/home.png) |
 
-| Screen | File | Shows |
-| --- | --- | --- |
-| Login + demo | `docs/screenshots/login.png` | 3-language login, demo shop button |
-| Munshi (voice) | `docs/screenshots/munshi.png` | Voice entry draft + review card |
-| Khata | `docs/screenshots/khata.png` | Customer balances, credit badges |
-| Reports | `docs/screenshots/reports.png` | Sales/products charts |
-| Assistant | `docs/screenshots/assistant.png` | AI chat panel answering a question |
-| Statement | `docs/screenshots/statement.png` | Public share link with QR |
+| Munshi — voice entry draft with auto price from stock | Munshi — examples built from real customers, tap to run |
+| --- | --- |
+| ![Munshi](docs/screenshots/munshi.png) | ![Munshi examples](docs/screenshots/munshi-examples.png) |
+
+| Khata — balances + credit badges (language switch) | Reports — sales, profit, top items |
+| --- | --- |
+| ![Khata](docs/screenshots/khata.png) | ![Reports](docs/screenshots/reports.png) |
+
+| Assistant — ask any page, answers in your language | Statement — WhatsApp / link / print, shareable |
+| --- | --- |
+| ![Assistant](docs/screenshots/assistant.png) | ![Statement](docs/screenshots/statement.png) |
 
 ## Privacy
 
