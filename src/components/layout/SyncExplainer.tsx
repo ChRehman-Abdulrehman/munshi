@@ -34,7 +34,7 @@ export function SyncExplainer({ open, onClose }: { open: boolean; onClose: () =>
         <div className="flex items-start gap-3 rounded-2xl bg-primary-soft p-3">
           <ListTodo className="mt-0.5 shrink-0 text-primary" size={20} />
           <p>
-            Abhi ka status: <b>{sync === "saved" ? t("se_st_saved") : sync === "queued" ? t("se_st_queued") : sync === "needs_review" ? t("se_st_review") : t("se_st_checking")}</b>.
+            {t("se_status_now")} <b>{sync === "saved" ? t("se_st_saved") : sync === "queued" ? t("se_st_queued") : sync === "needs_review" ? t("se_st_review") : t("se_st_checking")}</b>.
           </p>
         </div>
       </div>

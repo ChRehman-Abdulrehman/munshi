@@ -21,6 +21,17 @@ import { fill, getStoredLang, t as tr } from "@/lib/i18n";
 
 type Tab = "saaman" | "garam" | "mangwana";
 
+const UNIT_KEYS: Record<string, string> = {
+  pc: "unit_pc",
+  meter: "unit_meter",
+  kg: "unit_kg",
+  packet: "unit_packet",
+  dozen: "unit_dozen",
+  litre: "unit_litre",
+};
+
+const unitLabel = (u: string, t: (k: string) => string) => (UNIT_KEYS[u] ? t(UNIT_KEYS[u]) : u);
+
 export default function StockPage() {
   return (
     <React.Suspense fallback={<div className="p-8 text-center text-sm text-muted">{tr("sk_load", getStoredLang())}</div>}>
@@ -93,10 +104,10 @@ function StockInner() {
                   <button key={p.id} onClick={() => setEditProduct(p)} className="card press flex w-full items-center gap-3 p-3 text-left">
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[15px] font-bold">
-                        {p.name} {hotItem && <span aria-label="hot">🔥</span>}
+                        {p.name} {hotItem && <span aria-label={t("sk_hot_aria")}>🔥</span>}
                       </p>
                       <p className="text-xs text-muted">
-                        {money(p.selling_price, lang)} / {p.unit}
+                        {money(p.selling_price, lang)} / {unitLabel(p.unit, t)}
                         {p.cost_price ? ` • ${t("sk_cost_word")} ${money(p.cost_price, lang)}` : ""}
                         {left !== null && ` • ${fill(t("sk_days_stock"), { n: String(left) })}`}
                       </p>
@@ -459,7 +470,7 @@ function ProductSheet({
         <div className="flex items-center justify-between rounded-2xl bg-cream px-4 py-3 dark:bg-night-card">
           <div>
             <p className="text-xs text-muted">{t("sk_current_stock")}</p>
-            <p className="tnum text-xl font-black">{product.stock_qty} {product.unit}</p>
+            <p className="tnum text-xl font-black">{product.stock_qty} {unitLabel(product.unit, t)}</p>
           </div>
           <Button variant="outline" size="sm" onClick={() => setAdjustOpen(true)}>
             {t("sk_adjust_btn")}
@@ -549,7 +560,7 @@ function ProductForm({ onSaved }: { onSaved: () => void }) {
         <div className="flex flex-wrap gap-2">
           {units.map((u) => (
             <Chip key={u} active={unit === u} onClick={() => setUnit(u)}>
-              {u}
+              {unitLabel(u, t)}
             </Chip>
           ))}
         </div>

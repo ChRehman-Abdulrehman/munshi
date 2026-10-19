@@ -146,7 +146,7 @@ export default function BahiPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-black">Bahi</h1>
+          <h1 className="text-xl font-black">{t("bh_title")}</h1>
           <p className="text-xs text-muted">{t("bh_sub")}</p>
         </div>
         <Button size="sm" variant="outline" onClick={exportCsv}>
@@ -214,8 +214,8 @@ export default function BahiPage() {
                 <div className="mt-0.5 flex justify-end gap-1">
                   {e.status === "reversed" ? (
                     <>
-                      <Badge tone="muted">Reversed</Badge>
-                      <button onClick={() => setRestoreTarget(e)} className="rounded-lg p-1 text-primary" aria-label="Restore">
+                      <Badge tone="muted">{t("bh_reversed_badge")}</Badge>
+                      <button onClick={() => setRestoreTarget(e)} className="rounded-lg p-1 text-primary" aria-label={t("bh_restore_aria")}>
                         <RotateCcw size={14} />
                       </button>
                     </>
@@ -255,7 +255,7 @@ export default function BahiPage() {
             {t("bh_cancel")}
           </Button>
           <Button variant="danger" className="flex-1" onClick={doReverse}>
-            <Undo2 size={16} /> Reverse
+            <Undo2 size={16} /> {t("bh_reverse_btn")}
           </Button>
         </div>
       </BottomSheet>

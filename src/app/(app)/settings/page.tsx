@@ -12,6 +12,7 @@ import { QrCode } from "@/components/QrCode";
 import { PasswordChecklist } from "@/components/ui/PasswordChecklist";
 import { useToast } from "@/components/ui/toast";
 import { useAsync } from "@/lib/hooks";
+import { fill } from "@/lib/i18n";
 import { isValidPaymentNumber, paymentLine, paymentQrText, PAYMENT_METHOD_LABEL } from "@/lib/pay";
 import { hasPassword, removeShopPassword, setShopPassword, validatePassword, verifyCurrentSecret } from "@/lib/security";
 import {
@@ -78,7 +79,7 @@ export default function SettingsPage() {
     if (!repo) return;
     const name = munshiName.trim();
     if (name.length < 2) {
-      toast.push("warning", "Munshi ka naam kam az kam 2 harf ka ho.");
+      toast.push("warning", t("st_err_munshi_name"));
       return;
     }
     setNameBusy(true);
@@ -87,7 +88,7 @@ export default function SettingsPage() {
       await refreshAll();
       toast.push("success", t("st_munshi_saved"));
     } catch (e) {
-      toast.push("error", e instanceof Error ? e.message : "Save nahi hua.");
+      toast.push("error", e instanceof Error ? e.message : t("st_err_save"));
     } finally {
       setNameBusy(false);
     }
@@ -106,9 +107,9 @@ export default function SettingsPage() {
         payment_info: { method: payMethod, title: payTitle.trim() || shop?.name || "", number },
       });
       await refreshAll();
-      toast.push("success", "Payment number save — QR code tayyar hai. Number badalne par QR khud update ho jayega.");
+      toast.push("success", t("st_pay_saved"));
     } catch (e) {
-      toast.push("error", e instanceof Error ? e.message : "Save nahi hua.");
+      toast.push("error", e instanceof Error ? e.message : t("st_err_save"));
     } finally {
       setPayBusy(false);
     }
@@ -135,7 +136,7 @@ export default function SettingsPage() {
       a.download = "munshi-payment-qr.png";
       a.click();
     } catch {
-      toast.push("error", "QR download nahi hua.");
+      toast.push("error", t("st_err_qr_download"));
     }
   };
 
@@ -167,7 +168,7 @@ export default function SettingsPage() {
       setNewPw2("");
       toast.push("success", t("sec_saved"));
     } catch (e) {
-      toast.push("error", e instanceof Error ? e.message : "Save nahi hua.");
+      toast.push("error", e instanceof Error ? e.message : t("st_err_save"));
     } finally {
       setPwBusy(false);
     }
@@ -203,9 +204,9 @@ export default function SettingsPage() {
         hot_min_units: numOr(hotMinUnits, shop?.settings.hot_min_units ?? 5),
       });
       await refreshAll();
-      toast.push("success", "Settings save ho gayi.");
+      toast.push("success", t("st_settings_saved"));
     } catch (e) {
-      toast.push("error", e instanceof Error ? e.message : "Save nahi hui.");
+      toast.push("error", e instanceof Error ? e.message : t("st_err_save"));
     }
   };
 
@@ -215,7 +216,7 @@ export default function SettingsPage() {
     try {
       if (shop.is_demo) {
         await repo.clearDemo();
-        toast.push("success", "Demo data hata diya — ab khali dukaan hai.");
+        toast.push("success", t("st_demo_cleared"));
       } else {
         await repo.setDemoMode(true);
         await repo.seedDemo();
@@ -235,9 +236,9 @@ export default function SettingsPage() {
       const files = await repo.exportAll();
       const { downloadAllCsv } = await import("@/lib/export");
       downloadAllCsv(files);
-      toast.push("success", `${files.length} files download ho gayi.`);
+      toast.push("success", fill(t("st_backup_done"), { n: String(files.length) }));
     } catch (e) {
-      toast.push("error", e instanceof Error ? e.message : "Export nahi hua.");
+      toast.push("error", e instanceof Error ? e.message : t("st_err_export"));
     }
   };
 
@@ -250,7 +251,7 @@ export default function SettingsPage() {
     const perm = await requestWebPushPermission();
     setPushPerm(perm);
     if (perm === "granted") {
-      showLocalNotification("Munshi", t("st_notif_on_note"));
+      showLocalNotification(t("app_name"), t("st_notif_on_note"));
       toast.push("success", t("st_notif_on_toast"));
     } else if (perm === "unsupported") {
       toast.push("warning", t("st_notif_no_support"));
@@ -272,7 +273,7 @@ export default function SettingsPage() {
               {session?.member.name} ({session?.member.role === "owner" ? t("st_owner") : t("st_staff")}) • {repo?.mode === "local" ? t("st_local") : t("st_cloud")}
             </p>
           </div>
-          {shop?.is_demo && <Badge tone="saffron">DEMO</Badge>}
+          {shop?.is_demo && <Badge tone="saffron">{t("demo_badge")}</Badge>}
         </div>
       </Card>
 
@@ -288,7 +289,7 @@ export default function SettingsPage() {
           <button
             onClick={toggleTheme}
             className={`press h-8 w-14 rounded-full p-1 transition ${theme === "dark" ? "bg-primary" : "bg-line"}`}
-            aria-label="Dark mode toggle"
+            aria-label={t("st_dark_aria")}
           >
             <span className={`block h-6 w-6 rounded-full bg-white transition ${theme === "dark" ? "translate-x-6" : ""}`} />
           </button>
@@ -302,7 +303,7 @@ export default function SettingsPage() {
               await refreshAll();
             }}
             className={`press h-8 w-14 rounded-full p-1 transition ${shop?.settings.voice_reply ? "bg-primary" : "bg-line"}`}
-            aria-label="Voice reply toggle"
+            aria-label={t("st_voice_aria")}
           >
             <span className={`block h-6 w-6 rounded-full bg-white transition ${shop?.settings.voice_reply ? "translate-x-6" : ""}`} />
           </button>
@@ -315,7 +316,7 @@ export default function SettingsPage() {
           {t("st_munshi_note")}
         </p>
         <div className="flex gap-2">
-          <Input value={munshiName} onChange={(e) => setMunshiName(e.target.value)} placeholder="Misal: Chacha Munshi" aria-label="Munshi ka naam" />
+          <Input value={munshiName} onChange={(e) => setMunshiName(e.target.value)} placeholder={t("st_munshi_ph")} aria-label={t("st_munshi_name_aria")} />
           <Button size="sm" onClick={saveMunshiName} disabled={nameBusy}>
             {nameBusy ? "…" : "Save"}
           </Button>
@@ -369,7 +370,7 @@ export default function SettingsPage() {
         <div className="flex flex-wrap gap-2">
           {(["easypaisa", "jazzcash", "bank"] as const).map((m) => (
             <Chip key={m} active={payMethod === m} onClick={() => setPayMethod(m)}>
-              {PAYMENT_METHOD_LABEL[m]}
+              {m === "bank" ? t("method_bank") : PAYMENT_METHOD_LABEL[m]}
             </Chip>
           ))}
         </div>
@@ -390,7 +391,7 @@ export default function SettingsPage() {
           </div>
         </div>
         <Button size="sm" onClick={savePayment} disabled={payBusy}>
-          {payBusy ? "Save…" : paymentInfo ? t("st_update_number") : t("st_save")}
+          {payBusy ? t("sk_saving") : paymentInfo ? t("st_update_number") : t("st_save")}
         </Button>
 
         {paymentInfo && qrText && (
@@ -440,7 +441,7 @@ export default function SettingsPage() {
             <span className="font-semibold">{m.name} {m.user_id === session?.member.user_id && <Badge tone="primary">{t("st_you")}</Badge>}</span>
             <div className="flex items-center gap-1.5">
               <Badge tone="muted">{m.role === "owner" ? t("st_owner") : t("st_staff")}</Badge>
-              {m.permissions.can_override_credit && <Badge tone="amber">Override</Badge>}
+              {m.permissions.can_override_credit && <Badge tone="amber">{t("st_override_badge")}</Badge>}
             </div>
           </div>
         ))}
@@ -482,7 +483,7 @@ export default function SettingsPage() {
           <Button size="sm" variant="outline" onClick={async () => {
             if (!repo) return;
             const res = await repo.reconcile();
-            toast.push(res.ok ? "success" : "warning", res.ok ? t("reconcile_ok") : `${res.diffs.length} customer mein farq mila.`);
+            toast.push(res.ok ? "success" : "warning", res.ok ? t("reconcile_ok") : fill(t("st_recon_diff"), { n: String(res.diffs.length) }));
           }}>
             <Database size={14} /> {t("st_reconcile")}
           </Button>
@@ -494,7 +495,7 @@ export default function SettingsPage() {
         </div>
         <p className="flex items-start gap-1.5 text-xs text-muted">
           <AlertTriangle size={12} className="mt-0.5 shrink-0" />
-          {t("privacy_note")} Awaaz ki recording sirf transcribe hoti hai — audio save nahi hoti.
+          {t("privacy_note")} {t("st_privacy_voice")}
         </p>
       </Card>
 
@@ -514,7 +515,7 @@ export default function SettingsPage() {
           onDone={async () => {
             setAddMemberOpen(false);
             membersQ.reload();
-            showLocalNotification("Munshi", t("st_member_added"));
+            showLocalNotification(t("app_name"), t("st_member_added"));
           }}
           onError={(m) => toast.push("error", m)}
         />
@@ -553,7 +554,7 @@ function AddMemberForm({ onDone, onError }: { onDone: () => void; onError: (m: s
       });
       onDone();
     } catch (e) {
-      onError(e instanceof Error ? e.message : "Add nahi hua.");
+      onError(e instanceof Error ? e.message : t("st_err_add_member"));
     } finally {
       setBusy(false);
     }
@@ -576,17 +577,17 @@ function AddMemberForm({ onDone, onError }: { onDone: () => void; onError: (m: s
         </div>
       </div>
       <div className="flex gap-2">
-        <Chip active={role === "staff"} onClick={() => setRole("staff")}>Staff (helper)</Chip>
-        <Chip active={role === "owner"} onClick={() => setRole("owner")}>Owner</Chip>
+        <Chip active={role === "staff"} onClick={() => setRole("staff")}>{t("st_role_staff")}</Chip>
+        <Chip active={role === "owner"} onClick={() => setRole("owner")}>{t("st_role_owner")}</Chip>
       </div>
       {role === "staff" && (
         <label className="flex items-center gap-2 text-[14px] font-semibold">
           <input type="checkbox" checked={override} onChange={(e) => setOverride(e.target.checked)} className="h-5 w-5 accent-[#0B6B4F]" />
-          Limit ke bawajood udhaar de sakta hai (override)
+          {t("st_override_note")}
         </label>
       )}
       <Button className="w-full" onClick={save} disabled={busy}>
-        {busy ? "Save…" : "Member add karo"}
+        {busy ? t("sk_saving") : t("st_add_member_btn")}
       </Button>
     </div>
   );

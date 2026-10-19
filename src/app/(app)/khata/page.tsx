@@ -177,7 +177,7 @@ function AddCustomerInline({ onDone, onError }: { onDone: () => void; onError: (
     <div className="space-y-3">
       <div>
         <Label htmlFor="kc-name">{t("nc_name")} *</Label>
-        <Input id="kc-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Sana Bibi" />
+        <Input id="kc-name" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("kh_name_ph")} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>

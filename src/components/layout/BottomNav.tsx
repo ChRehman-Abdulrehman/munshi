@@ -20,7 +20,7 @@ export function BottomNav() {
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/97 backdrop-blur dark:bg-night-card/97 dark:border-night-line lg:hidden no-print safe-bottom"
-      aria-label="Main navigation"
+      aria-label={t("nav_main_aria")}
     >
       <div className="mx-auto grid max-w-lg grid-cols-5">
         {TABS.map((tab) => {

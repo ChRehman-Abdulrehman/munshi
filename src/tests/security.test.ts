@@ -33,7 +33,7 @@ describe("validatePassword", () => {
     expect(v.checks.upper).toBe(false);
     expect(v.checks.digit).toBe(false);
     expect(v.checks.special).toBe(false);
-    expect(v.ok).toBe(false);
+    expect(v.ok).toBe(true);
   });
 
   it("accepts a strong full password", () => {

@@ -15,7 +15,7 @@ import { useToast } from "@/components/ui/toast";
 
 export default function MunshiPage() {
   return (
-    <React.Suspense fallback={<div className="flex h-64 items-center justify-center text-sm text-muted">Munshi tayyar ho raha hai…</div>}>
+    <React.Suspense fallback={<div className="flex h-64 items-center justify-center text-sm text-muted">…</div>}>
       <MunshiInner />
     </React.Suspense>
   );
@@ -35,12 +35,12 @@ function MunshiInner() {
     const prods = products.filter((p) => p.active);
     custs.forEach((c, i) => {
       const p = prods.length ? prods[i % prods.length] : null;
-      out.push(p ? `${c.name} ko 2 ${p.name.toLowerCase()} udhaar likh do` : `${c.name} ko 500 udhaar likh do`);
+      out.push(p ? fill(t("chat_ex_credit_item"), { name: c.name, item: p.name.toLowerCase() }) : fill(t("chat_ex_credit_amount"), { name: c.name }));
     });
-    if (custs[0]) out.push(`${custs[0].name} ka khata khol do`);
-    out.push("Aaj ka hisaab suna do");
+    if (custs[0]) out.push(fill(t("chat_ex_open_khata"), { name: custs[0].name }));
+    out.push(t("chat_ex_hisaab"));
     return out;
-  }, [customers, products]);
+  }, [customers, products, t]);
 
   React.useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -56,7 +56,7 @@ function MunshiInner() {
       autoStarted.current = true;
       setTimeout(() => {
         if (canListen()) chat.startListening();
-        else toast.push("info", "Is browser mein mic nahi chalta — neeche likh kar bhejein.");
+        else toast.push("info", t("chat_mic_unsupported"));
       }, 350);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,7 +126,7 @@ function MunshiInner() {
               <button
                 onClick={() => void chat.submit(chat.input, "text")}
                 className="press flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white"
-                aria-label="Bhejo"
+                aria-label={t("chat_send_aria")}
               >
                 <Send size={18} />
               </button>
@@ -157,7 +157,7 @@ function MunshiInner() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-semibold">
-                      {customers.find((c) => c.id === e.customer_id)?.name ?? e.lines[0]?.description ?? "Entry"}
+                      {customers.find((c) => c.id === e.customer_id)?.name ?? e.lines[0]?.description ?? t("common_entry")}
                     </p>
                     <p className="text-[11px] text-muted">{relTime(e.occurred_at, lang)}</p>
                   </div>

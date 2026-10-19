@@ -29,19 +29,19 @@ export function TopBar({ onMenu }: { onMenu?: () => void }) {
       <header className="sticky top-0 z-40 border-b border-line bg-cream/95 backdrop-blur dark:bg-night-bg/95 dark:border-night-line no-print">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-3">
           {onMenu && (
-            <button onClick={onMenu} className="rounded-xl p-2 text-muted hover:bg-black/5 lg:hidden dark:hover:bg-white/10" aria-label="Menu">
+            <button onClick={onMenu} className="rounded-xl p-2 text-muted hover:bg-black/5 lg:hidden dark:hover:bg-white/10" aria-label={t("tb_menu_aria")}>
               <Menu size={20} />
             </button>
           )}
           <Link href="/" className="flex min-w-0 items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-sm font-black text-white">م</span>
-            <span className="truncate text-[15px] font-bold">{shop?.name ?? "Munshi"}</span>
-            {shop?.is_demo && <Badge tone="saffron" className="hidden sm:inline-flex">DEMO</Badge>}
+            <span className="truncate text-[15px] font-bold">{shop?.name ?? t("app_name")}</span>
+            {shop?.is_demo && <Badge tone="saffron" className="hidden sm:inline-flex">{t("demo_badge")}</Badge>}
           </Link>
           <div className="flex-1" />
           <button
             onClick={() => setExplainOpen(true)}
-            aria-label="Sync status"
+            aria-label={t("tb_sync_aria")}
             className="press"
           >
             <Badge tone={sb.tone} className="gap-1">
@@ -50,7 +50,7 @@ export function TopBar({ onMenu }: { onMenu?: () => void }) {
             </Badge>
           </button>
           <select
-            aria-label="Language"
+            aria-label={t("tb_lang_aria")}
             value={lang}
             onChange={(e) => setLang(e.target.value as "roman" | "ur" | "en")}
             className="h-9 rounded-xl border border-line bg-white px-2 text-[13px] font-semibold dark:bg-night-card dark:border-night-line"
@@ -61,7 +61,7 @@ export function TopBar({ onMenu }: { onMenu?: () => void }) {
               </option>
             ))}
           </select>
-          <Link href="/alerts" aria-label="Alerts" className={cn("relative rounded-xl p-2 text-muted hover:bg-black/5 dark:hover:bg-white/10", pathname === "/alerts" && "text-primary")}>
+          <Link href="/alerts" aria-label={t("tb_alerts_aria")} className={cn("relative rounded-xl p-2 text-muted hover:bg-black/5 dark:hover:bg-white/10", pathname === "/alerts" && "text-primary")}>
             <Bell size={20} />
             {unread > 0 && (
               <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brick px-1 text-[10px] font-bold text-white">

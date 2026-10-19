@@ -108,7 +108,7 @@ export default function ReportsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-black">{t("reports")}</h1>
         <Button size="sm" variant="outline" onClick={exportAll}>
-          <Download size={14} /> Export
+          <Download size={14} /> {t("rp_export_btn")}
         </Button>
       </div>
 
@@ -272,7 +272,7 @@ export default function ReportsPage() {
       </Card>
 
       <Card className="no-print">
-        <CardTitle className="mb-2 flex items-center gap-1.5"><BarChart3 size={14} /> Backup</CardTitle>
+        <CardTitle className="mb-2 flex items-center gap-1.5"><BarChart3 size={14} /> {t("rp_backup_title")}</CardTitle>
         <p className="mb-2 text-[13px] text-muted">{t("rp_backup_note")}</p>
         <Button variant="outline" size="sm" onClick={exportAll}>
           <Download size={14} /> {t("rp_download_all")}

@@ -53,11 +53,11 @@ export function WantedCard({ draft, onDone }: { draft: Draft; onDone: (text: str
   };
 
   const reasons: { value: string; label: string }[] = [
-    { value: "out_of_stock", label: lang === "en" ? "Was out of stock" : "Stock khatam tha" },
-    { value: "price", label: lang === "en" ? "Price too high" : "Qeemat zyada thi" },
-    { value: "variant", label: lang === "en" ? "Wrong colour/size" : "Ye rang/size nahi tha" },
-    { value: "deferred", label: lang === "en" ? "Wants it later" : "Baad mein lena hai" },
-    { value: "other", label: lang === "en" ? "Something else" : "Kuch aur" },
+    { value: "out_of_stock", label: t("wanted_r_stock") },
+    { value: "price", label: t("wanted_r_price") },
+    { value: "variant", label: t("wanted_r_variant") },
+    { value: "deferred", label: t("wanted_r_deferred") },
+    { value: "other", label: t("wanted_r_other") },
   ];
 
   return (
@@ -94,7 +94,7 @@ export function WantedCard({ draft, onDone }: { draft: Draft; onDone: (text: str
       )}
       <div className="flex gap-2">
         <Button className="flex-1" onClick={save} disabled={busy}>
-          {busy ? "Save…" : t("wanted_save")}
+          {busy ? t("sk_saving") : t("wanted_save")}
         </Button>
       </div>
       <p className="text-xs text-muted">
@@ -115,15 +115,15 @@ export function AddCustomerCard({ draft, onDone }: { draft: Draft; onDone: (text
 
   const save = async () => {
     if (!repo || name.trim().length < 2) {
-      toast.push("warning", lang === "en" ? "Enter a name." : "Naam likhein.");
+      toast.push("warning", t("nc_err_name"));
       return;
     }
     setBusy(true);
     try {
       const c = await repo.upsertCustomer({ name: name.trim(), phone: phone.trim() || null, notes: null, credit_limit: null, payment_terms_days: null });
       await refreshAll();
-      toast.push("success", lang === "en" ? `${c.name} added to accounts.` : `${c.name} khata mein add ho gaya.`);
-      onDone(lang === "en" ? `👤 New customer created: ${c.name}.` : `👤 Naya customer ban gaya: ${c.name}.`, c);
+      toast.push("success", fill(t("nc_added_toast"), { name: c.name }));
+      onDone(`👤 ${fill(t("nc_created_msg"), { name: c.name })}`, c);
     } catch (e) {
       toast.push("error", e instanceof Error ? e.message : t("rev_save_fail"));
     } finally {
@@ -142,10 +142,10 @@ export function AddCustomerCard({ draft, onDone }: { draft: Draft; onDone: (text
       </div>
       <div>
         <Label htmlFor="nc-phone">{t("nc_phone")}</Label>
-        <Input id="nc-phone" value={phone} onChange={(e) => setPhone(e.target.value.replace(/[^\d+]/g, ""))} inputMode="tel" placeholder="03xx-xxxxxxx" />
+        <Input id="nc-phone" value={phone} onChange={(e) => setPhone(e.target.value.replace(/[^\d+]/g, ""))} inputMode="tel" placeholder={t("nc_phone_ph")} />
       </div>
       <Button className="w-full" onClick={save} disabled={busy}>
-        {busy ? "Save…" : t("nc_save")}
+        {busy ? t("sk_saving") : t("nc_save")}
       </Button>
     </div>
   );
@@ -165,14 +165,14 @@ export function CreditLimitCard({ draft, onDone }: { draft: Draft; onDone: (text
     if (!repo) return;
     const val = parseFloat(limit);
     if (!isFinite(val) || val < 0) {
-      toast.push("warning", lang === "en" ? "Enter a valid limit." : "Limit sahi likhein.");
+      toast.push("warning", t("cl_err_limit"));
       return;
     }
     setBusy(true);
     try {
       await repo.setCreditLimit(customer.id, val, reason || "voice command");
       await refreshAll();
-      toast.push("success", lang === "en" ? `${customer.name}'s limit set to ${money(val)}.` : `${customer.name} ki limit ${money(val)} kar di.`);
+      toast.push("success", fill(t("cl_set_msg"), { name: customer.name, limit: String(val) }));
       onDone(lang === "en" ? `🔒 ${customer.name}'s new credit limit: ${money(val)}.` : `🔒 ${customer.name} ki nayi udhaar limit: ${money(val)}.`);
     } catch (e) {
       toast.push("error", e instanceof Error ? e.message : t("rev_save_fail"));
@@ -197,7 +197,7 @@ export function CreditLimitCard({ draft, onDone }: { draft: Draft; onDone: (text
         </div>
       </div>
       <Button className="w-full" onClick={save} disabled={busy}>
-        {busy ? "Save…" : t("cl_save")}
+        {busy ? t("sk_saving") : t("cl_save")}
       </Button>
     </div>
   );
@@ -235,11 +235,7 @@ export function EntryOpCard({
       await refreshAlerts();
       if (res.ok) {
         toast.push("success", t("op_reversed"));
-        onDone(
-          lang === "en"
-            ? `↩️ “${entry.lines[0]?.description ?? "Entry"} ${money(entry.total)}” reversed. Accounts are correct now.`
-            : `↩️ “${entry.lines[0]?.description ?? "Entry"} ${money(entry.total)}” wapas kar di. Ab hisaab theek hai.`
-        );
+        onDone(fill(t("op_reversed_detail"), { desc: entry.lines[0]?.description ?? t("common_entry"), amt: money(entry.total) }));
       } else {
         toast.push("error", res.message);
       }
@@ -255,7 +251,7 @@ export function EntryOpCard({
       <p className="text-[15px] font-bold">{isDelete ? t("op_delete_q") : t("op_edit_q")}</p>
       <div className="rounded-2xl border border-line p-3 text-[14px] dark:border-night-line">
         <div className="flex justify-between">
-          <b>{entry.lines[0]?.description ?? (entry.type === "payment" ? t("rev_payment") : "Entry")}</b>
+          <b>{entry.lines[0]?.description ?? (entry.type === "payment" ? t("rev_payment") : t("common_entry"))}</b>
           <span className="tnum font-bold">{money(entry.total)}</span>
         </div>
         <p className="text-xs text-muted">{new Date(entry.occurred_at).toLocaleString("en-PK")}</p>

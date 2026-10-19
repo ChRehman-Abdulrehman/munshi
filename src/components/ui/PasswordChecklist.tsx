@@ -30,8 +30,8 @@ export function PasswordChecklist({ password, lang }: { password: string; lang: 
       {password.length > 0 && (
         <div className="h-1.5 overflow-hidden rounded-full bg-line dark:bg-night-line">
           <div
-            className={cn("h-full rounded-full transition-all", v.ok ? "bg-primary" : v.passed >= 3 ? "bg-saffron" : "bg-brick")}
-            style={{ width: `${(v.passed / PASSWORD_CHECK_SPECS.length) * 100}%` }}
+            className={cn("h-full rounded-full transition-all", v.ok ? "bg-primary" : password.length >= 6 ? "bg-saffron" : "bg-brick")}
+            style={{ width: `${Math.min(100, (password.length / 8) * 100)}%` }}
           />
         </div>
       )}

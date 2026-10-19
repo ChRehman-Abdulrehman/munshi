@@ -11,7 +11,7 @@ import { BrandBlock } from "@/components/BrandBlock";
 import { AssistantPanel } from "@/components/assistant/AssistantPanel";
 
 function Gate({ children }: { children: React.ReactNode }) {
-  const { ready, session } = useApp();
+  const { ready, session, t } = useApp();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -24,7 +24,7 @@ function Gate({ children }: { children: React.ReactNode }) {
       <div className="flex min-h-dvh items-center justify-center bg-cream dark:bg-night-bg">
         <div className="flex flex-col items-center gap-3">
           <div className="pulse-ring flex h-16 w-16 items-center justify-center rounded-full bg-primary text-2xl font-black text-white">م</div>
-          <p className="text-sm text-muted">Munshi jaag raha hai…</p>
+          <p className="text-sm text-muted">{t("app_loading")}</p>
         </div>
       </div>
     );

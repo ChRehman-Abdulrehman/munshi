@@ -9,7 +9,7 @@ import { Skeleton, EmptyState } from "@/components/ui/bits";
 import { Printer, ShieldCheck, FileText } from "lucide-react";
 import type { StatementBundle } from "@/lib/repo/types";
 import { buildStatement } from "@/lib/statements";
-import { fill, getStoredLang, t } from "@/lib/i18n";
+import { fill, getStoredLang, localizeStatementDesc, saleStatusLabel, t } from "@/lib/i18n";
 import type { Lang } from "@/lib/types";
 
 export default function PublicStatementPage() {
@@ -57,12 +57,12 @@ export default function PublicStatementPage() {
           <div className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary text-base font-black text-white">م</span>
             <div>
-              <p className="text-[15px] font-black">Munshi Statement</p>
+              <p className="text-[15px] font-black">{t("ps_brand_title", lang)}</p>
               <p className="text-[11px] text-muted">{t("ps_readonly", lang)}</p>
             </div>
           </div>
           <button onClick={() => window.print()} className="press flex min-h-[44px] items-center gap-2 rounded-2xl border border-line bg-white px-4 text-sm font-bold dark:bg-night-card dark:border-night-line">
-            <Printer size={16} /> Print / PDF
+            <Printer size={16} /> {t("ps_print_btn", lang)}
           </button>
         </div>
 
@@ -74,7 +74,7 @@ export default function PublicStatementPage() {
 
         <div className="print-area rounded-3xl border border-line bg-white p-5 dark:bg-night-card dark:border-night-line">
           <div className="mb-4 border-b border-line pb-3 text-center dark:border-night-line">
-            <p className="text-xl font-black">Munshi</p>
+            <p className="text-xl font-black">{t("app_name", lang)}</p>
             <p className="text-sm text-muted">
               {fill(t("cd_stmt_sub", lang), { name: stmt.customer.name, from: fmtDate(stmt.from, lang), to: fmtDate(stmt.to, lang) })}
             </p>
@@ -96,8 +96,8 @@ export default function PublicStatementPage() {
                 <tr key={i} className="border-b border-line/60 dark:border-night-line/60">
                   <td className="py-2">{fmtDate(l.date, lang)}</td>
                   <td className="py-2">
-                    {l.description}
-                    {l.sale_status && <span className="ml-1 text-[11px] text-muted">({l.sale_status})</span>}
+                    {localizeStatementDesc(l.description, lang)}
+                    {l.sale_status && <span className="ml-1 text-[11px] text-muted">({saleStatusLabel(l.sale_status, lang)})</span>}
                   </td>
                   <td className="tnum py-2 text-right">{l.debit > 0 ? money(l.debit, lang) : "—"}</td>
                   <td className="tnum py-2 text-right">{l.credit > 0 ? money(l.credit, lang) : "—"}</td>

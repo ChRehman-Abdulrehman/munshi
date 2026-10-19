@@ -27,7 +27,7 @@ export function Sidebar() {
 
   return (
     <aside className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-64 shrink-0 border-r border-line bg-white/60 px-3 py-4 dark:bg-night-card/40 dark:border-night-line lg:flex lg:flex-col xl:w-60">
-      <nav className="flex flex-1 flex-col gap-1" aria-label="Sidebar">
+      <nav className="flex flex-1 flex-col gap-1" aria-label={t("nav_sidebar_aria")}>
         {LINKS.map((l) => {
           const active = l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
           const Icon = l.icon;
@@ -51,11 +51,11 @@ export function Sidebar() {
       <div className="mt-2 space-y-2 border-t border-line pt-3 dark:border-night-line">
         <button onClick={toggleTheme} className="press flex min-h-[44px] w-full items-center gap-3 rounded-2xl px-3 text-sm font-semibold text-muted hover:bg-black/5 dark:hover:bg-white/5">
           <SunMoon size={18} />
-          {theme === "dark" ? "Light mode" : "Dark mode"}
+          {theme === "dark" ? t("side_light_mode") : t("side_dark_mode")}
         </button>
         {shop?.is_demo && (
           <div className="rounded-2xl bg-saffron-soft p-3 text-xs font-semibold text-ink">
-            DEMO DATA — asli hisaab nahi. Settings se hata sakte hain.
+            {t("side_demo_note")}
           </div>
         )}
       </div>

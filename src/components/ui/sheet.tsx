@@ -4,6 +4,7 @@ import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { getStoredLang, t } from "@/lib/i18n";
 
 export function BottomSheet({
   open,
@@ -62,7 +63,7 @@ export function BottomSheet({
               <h2 className={cn("text-lg font-bold", !title && "sr-only")}>{title ?? "—"}</h2>
               <button
                 onClick={onClose}
-                aria-label="Band karein"
+                aria-label={t("close_aria", getStoredLang())}
                 className="rounded-full p-2 text-muted hover:bg-black/5 dark:hover:bg-white/10"
               >
                 <X size={20} />

@@ -19,7 +19,7 @@ import { saleStatus } from "@/lib/ledger/balance";
 import { buildStatement, statementWhatsAppText } from "@/lib/statements";
 import { paymentLine } from "@/lib/pay";
 import { buildPublicShareUrl, useCopyToClipboard, whatsappLink } from "@/lib/share";
-import { custBadgeLabel, fill, saleStatusLabel } from "@/lib/i18n";
+import { custBadgeLabel, fill, localizeStatementDesc, saleStatusLabel } from "@/lib/i18n";
 import type { Entry } from "@/lib/types";
 import { uuid } from "@/lib/id";
 
@@ -167,11 +167,11 @@ export default function CustomerDetailPage() {
           <div className="flex gap-1.5">
             {customer.phone && (
               <>
-                <a href={`tel:${customer.phone}`} className="press flex h-11 w-11 items-center justify-center rounded-2xl border border-line dark:border-night-line" aria-label="Call">
+                <a href={`tel:${customer.phone}`} className="press flex h-11 w-11 items-center justify-center rounded-2xl border border-line dark:border-night-line" aria-label={t("cd_call_aria")}>
                   <Phone size={18} />
                 </a>
                 <a
-                  href={whatsappLink(customer.phone, fill(t("cd_wa_msg"), { name: customer.name, shop: shop?.name ?? "Munshi", amt: money(balance, lang) }))}
+                  href={whatsappLink(customer.phone, fill(t("cd_wa_msg"), { name: customer.name, shop: shop?.name ?? t("app_name"), amt: money(balance, lang) }))}
                   target="_blank"
                   rel="noreferrer"
                   className="press flex h-11 w-11 items-center justify-center rounded-2xl border border-line text-primary dark:border-night-line"
@@ -189,7 +189,7 @@ export default function CustomerDetailPage() {
             <Wallet size={18} /> {t("cd_payment_btn")}
           </Button>
           <Button variant="secondary" className="flex-1" onClick={() => setStmtOpen(true)}>
-            <FileText size={18} /> Statement
+            <FileText size={18} /> {t("cd_statement_btn")}
           </Button>
         </div>
       </div>
@@ -226,7 +226,7 @@ export default function CustomerDetailPage() {
                   <Undo2 size={16} />
                 </button>
               )}
-              {row.entry && row.entry.status === "reversed" && <Badge tone="muted">Reversed</Badge>}
+              {row.entry && row.entry.status === "reversed" && <Badge tone="muted">{t("bh_reversed_badge")}</Badge>}
             </div>
           ))
         )}
@@ -236,12 +236,12 @@ export default function CustomerDetailPage() {
         <PaymentForm balance={balance} onSave={doPayment} />
       </BottomSheet>
 
-      <BottomSheet open={stmtOpen} onClose={() => setStmtOpen(false)} title="Statement" className="max-w-2xl">
+      <BottomSheet open={stmtOpen} onClose={() => setStmtOpen(false)} title={t("cd_statement_btn")} className="max-w-2xl">
         {statement && (
           <div className="space-y-3">
             <div className="flex gap-2 no-print">
               <a
-                href={whatsappLink(customer.phone, statementWhatsAppText(statement, shop?.name ?? "Munshi", paymentLine(shop?.settings.payment_info ?? null, shop?.name)))}
+                href={whatsappLink(customer.phone, statementWhatsAppText(statement, shop?.name ?? t("app_name"), paymentLine(shop?.settings.payment_info ?? null, shop?.name)))}
                 target="_blank"
                 rel="noreferrer"
                 className="press flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-bold text-white"
@@ -273,7 +273,7 @@ export default function CustomerDetailPage() {
                 onClick={() => window.print()}
                 className="press flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-2xl border border-line text-sm font-bold dark:border-night-line"
               >
-                <Printer size={16} /> Print / PDF
+                <Printer size={16} /> {t("cd_print_btn")}
               </button>
             </div>
             <div className="print-area rounded-2xl border border-line p-4 dark:border-night-line">
@@ -297,7 +297,7 @@ export default function CustomerDetailPage() {
                   {statement.lines.map((l, i) => (
                     <tr key={i} className="border-b border-line/60 dark:border-night-line/60">
                       <td className="py-1.5">{fmtDate(l.date, lang)}</td>
-                      <td className="py-1.5">{l.description}</td>
+                      <td className="py-1.5">{localizeStatementDesc(l.description, lang)}</td>
                       <td className="tnum py-1.5 text-right">{l.debit > 0 ? money(l.debit, lang) : "—"}</td>
                       <td className="tnum py-1.5 text-right">{l.credit > 0 ? money(l.credit, lang) : "—"}</td>
                       <td className="tnum py-1.5 text-right font-bold">{money(l.balance, lang)}</td>
@@ -320,7 +320,7 @@ export default function CustomerDetailPage() {
                 </div>
               </div>
               <p className="mt-3 text-center text-[11px] text-muted">
-                {fill(t("cd_stmt_footer"), { shop: shop?.name ?? "Munshi" })}
+                {fill(t("cd_stmt_footer"), { shop: shop?.name ?? t("app_name") })}
               </p>
             </div>
           </div>
@@ -347,7 +347,7 @@ export default function CustomerDetailPage() {
             {t("bh_cancel")}
           </Button>
           <Button variant="danger" className="flex-1" onClick={doReverse}>
-            Reverse
+            {t("bh_reverse_btn")}
           </Button>
         </div>
       </BottomSheet>
@@ -363,10 +363,10 @@ function PaymentForm({ balance, onSave }: { balance: number; onSave: (amount: nu
   const a = parseFloat(amount) || 0;
 
   const methods = [
-    { v: "cash", label: "Cash" },
+    { v: "cash", label: t("method_cash") },
     { v: "easypaisa", label: "EasyPaisa" },
     { v: "jazzcash", label: "JazzCash" },
-    { v: "bank", label: "Bank" },
+    { v: "bank", label: t("method_bank") },
   ];
 
   return (

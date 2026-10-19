@@ -214,7 +214,7 @@ export function ReviewCard({
                 <span className="tnum text-sm font-bold">
                   {it.qty != null && it.unit_price != null ? money(Math.max(0, it.qty * it.unit_price - it.discount)) : "—"}
                 </span>
-                <button onClick={() => setEditIndex(i)} aria-label="Edit" className="rounded-lg p-2 text-muted hover:bg-black/5 dark:hover:bg-white/10">
+                <button onClick={() => setEditIndex(i)} aria-label={t("rev_edit_aria")} className="rounded-lg p-2 text-muted hover:bg-black/5 dark:hover:bg-white/10">
                   <Pencil size={16} />
                 </button>
               </div>
@@ -323,7 +323,7 @@ export function ReviewCard({
           id="override-reason"
           value={overrideReason}
           onChange={(e) => setOverrideReason(e.target.value)}
-          placeholder="Misal: purana customer hai, kal payment ka wada kiya"
+          placeholder={t("rev_reason_ph")}
         />
         <div className="mt-3 flex gap-2">
           <Button variant="outline" className="flex-1" onClick={() => setOverrideOpen(false)}>
@@ -388,11 +388,11 @@ function ItemEditSheet({
           <div>
             <Label htmlFor="item-qty">{t("rev_qty")}</Label>
             <div className="flex items-center gap-2">
-              <button onClick={() => setQty(String(Math.max(1, q - 1)))} className="press h-12 w-12 rounded-2xl border border-line text-xl font-bold dark:border-night-line" aria-label="Kam">
+              <button onClick={() => setQty(String(Math.max(1, q - 1)))} className="press h-12 w-12 rounded-2xl border border-line text-xl font-bold dark:border-night-line" aria-label={t("rev_dec_aria")}>
                 −
               </button>
               <Input id="item-qty" inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} className="text-center" />
-              <button onClick={() => setQty(String(q + 1))} className="press h-12 w-12 rounded-2xl border border-line text-xl font-bold dark:border-night-line" aria-label="Zyada">
+              <button onClick={() => setQty(String(q + 1))} className="press h-12 w-12 rounded-2xl border border-line text-xl font-bold dark:border-night-line" aria-label={t("rev_inc_aria")}>
                 +
               </button>
             </div>
@@ -403,11 +403,11 @@ function ItemEditSheet({
           </div>
         </div>
         <div className="flex justify-between rounded-2xl bg-primary-soft px-4 py-3 text-sm font-semibold">
-          <span>Line total</span>
+          <span>{t("rev_line_total")}</span>
           <span className="tnum">{money(Math.max(0, q * p - item.discount))}</span>
         </div>
         <div className="flex gap-2">
-          <Button variant="ghost" className="text-brick" onClick={onDelete} aria-label="Item hatao">
+          <Button variant="ghost" className="text-brick" onClick={onDelete} aria-label={t("rev_del_aria")}>
             <Trash2 size={18} /> {t("rev_remove")}
           </Button>
           <Button className="flex-1" onClick={() => onSave({ name: name.trim() || item.name, qty: q || null, unit_price: p || null })}>

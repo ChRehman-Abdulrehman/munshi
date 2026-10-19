@@ -73,7 +73,7 @@ export default function LoginPage() {
           <div className="pulse-ring flex h-20 w-20 items-center justify-center rounded-3xl bg-primary text-3xl font-black text-white shadow-lift">
             م
           </div>
-          <h1 className="text-2xl font-black">Munshi</h1>
+          <h1 className="text-2xl font-black">{t("app_name")}</h1>
           <p className="text-[15px] text-muted">{t("login_tagline")}</p>
         </div>
 
@@ -87,14 +87,14 @@ export default function LoginPage() {
         </div>
 
         <div className="card space-y-4 p-5">
-          <BrandBlock />
+          <BrandBlock name={t("app_name")} tagline={t("brand_tagline")} />
           <div>
             <Label htmlFor="login-name">{t("login_name")}</Label>
-            <Input id="login-name" value={name} onChange={(e) => setName(e.target.value)} placeholder={lang === "en" ? "e.g. Muhammad Ahmed" : "Misal: Muhammad Ahmed"} autoComplete="name" />
+            <Input id="login-name" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("login_name_ph")} autoComplete="name" />
           </div>
           <div>
             <Label htmlFor="login-shop">{t("login_shop")}</Label>
-            <Input id="login-shop" value={shopName} onChange={(e) => setShopName(e.target.value)} placeholder={lang === "en" ? "e.g. Ali Cloth House, Lahore" : "Misal: Ali Cloth House, Lahore"} />
+            <Input id="login-shop" value={shopName} onChange={(e) => setShopName(e.target.value)} placeholder={t("login_shop_ph")} />
           </div>
           <div>
             <Label htmlFor="login-pin">{t("login_pin")}</Label>

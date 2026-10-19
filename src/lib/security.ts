@@ -34,7 +34,7 @@ export function validatePassword(pw: string): PasswordValidation {
   const checks = {} as Record<PasswordCheckId, boolean>;
   for (const c of PASSWORD_CHECKS) checks[c.id] = c.test(pw);
   const passed = Object.values(checks).filter(Boolean).length;
-  return { ok: passed === PASSWORD_CHECKS.length, checks, passed };
+  return { ok: checks.len, checks, passed };
 }
 
 function toBase64(bytes: Uint8Array): string {

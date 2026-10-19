@@ -26,7 +26,7 @@ export function useMunshiChat() {
   const router = useRouter();
   const toast = useToast();
   const online = useOnline();
-  const munshiName = shop?.settings.munshi_name?.trim() || "Munshi";
+  const munshiName = shop?.settings.munshi_name?.trim() || t("app_name");
 
   const [msgs, setMsgs] = React.useState<Msg[]>([]);
   const [input, setInput] = React.useState("");

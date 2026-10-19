@@ -142,10 +142,14 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-          <QuickChip href="/munshi?text=Ali%20ko%202%20lawn%20suit%202500%20udhaar%20likh%20do" label="Ali ko 2 lawn suit 2500 udhaar" />
-          <QuickChip href="/munshi?text=Kiran%20ne%202000%20payment%20di" label="Kiran ne 2000 payment di" />
-          <QuickChip href="/munshi?text=Aaj%20ka%20hisaab%20suna%20do" label="Aaj ka hisaab suna do" />
-          <QuickChip href="/munshi?text=Ali%20ka%20khata%20khol%20do" label="Ali ka khata khol do" />
+          {[
+            { label: t("hm_chip_credit_item"), text: "Ali ko 2 lawn suit 2500 udhaar likh do" },
+            { label: t("hm_chip_payment"), text: "Kiran ne 2000 payment di" },
+            { label: t("hm_chip_hisaab"), text: "Aaj ka hisaab suna do" },
+            { label: t("hm_chip_khata"), text: "Ali ka khata khol do" },
+          ].map((c) => (
+            <QuickChip key={c.text} href={`/munshi?text=${encodeURIComponent(c.text)}`} label={c.label} />
+          ))}
         </div>
       </Card>
     </div>

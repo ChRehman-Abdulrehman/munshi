@@ -101,7 +101,7 @@ export function AssistantPanel() {
                 <button
                   onClick={() => void chat.submit(chat.input, "text")}
                   className="press flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white"
-                  aria-label="Bhejo"
+                  aria-label={t("chat_send_aria")}
                 >
                   <Send size={18} />
                 </button>
@@ -115,7 +115,7 @@ export function AssistantPanel() {
                 </button>
               )}
             </div>
-            <p className="px-1 pt-1 text-center text-[10px] text-muted">{lang === "en" ? "Voice or text — Munshi does the rest." : "Awaz ya likh kar — baqi Munshi sambhal le ga."}</p>
+            <p className="px-1 pt-1 text-center text-[10px] text-muted">{t("panel_footer_hint")}</p>
           </div>
         </div>
       )}
