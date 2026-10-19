@@ -262,9 +262,7 @@ export function EntryOpCard({
         </Button>
       ) : (
         <p className="text-[13px] text-muted">
-          {lang === "en"
-            ? "To correct: first reverse this entry in Bahi, then speak the new correct entry. (The old entry is never deleted — only reversed.)"
-            : "Correction ke liye: pehle is entry ko Bahi se reverse karein, phir nayi sahi entry bol dein. (Hisab hamesha safe rehta hai — purani entry mit ti nahi, reverse hoti hai.)"}
+          {t("op_correct_help")}
         </p>
       )}
     </div>
