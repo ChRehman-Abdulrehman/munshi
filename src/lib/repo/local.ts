@@ -85,41 +85,8 @@ export class LocalRepo implements Repo {
     return { shop, member };
   }
 
-  async signIn(input: { name: string; pin: string; shopName?: string }): Promise<Session> {
+  private async birthShop(input: { name: string; pin: string; shopName?: string }): Promise<Session> {
     const d = await this.db();
-    const shops: Shop[] = await d.getAll("shops");
-    const members: Member[] = await d.getAll("members");
-    if (shops.length) {
-      if (!input.pin) throw new Error("PIN ya password likhein.");
-      const session = await this.getSession();
-      const ordered = session
-        ? [session.shop, ...shops.filter((s) => s.id !== session.shop.id)]
-        : shops;
-      const matchOwner = async (shop: Shop): Promise<Member | null> => {
-        const shopMembers = members.filter((m) => m.shop_id === shop.id);
-        const list =
-          session && session.shop.id === shop.id && shopMembers.some((m) => m.id === session.member.id)
-            ? [session.member, ...shopMembers.filter((m) => m.id !== session.member.id)]
-            : shopMembers;
-        for (const member of list) {
-          if (shop.is_demo && input.pin === "1234") return member;
-          const ok = hasPassword(shop)
-            ? await verifyPassword(input.pin, shop.settings.password_hash!, shop.settings.password_salt!)
-            : (await sha256Hex(input.pin)) === member.user_id;
-          if (ok) return member;
-        }
-        return null;
-      };
-      for (const shop of ordered) {
-        const member = await matchOwner(shop);
-        if (member) {
-          await this.setMeta("session", { shop_id: shop.id, member_id: member.id });
-          return { shop, member };
-        }
-      }
-      throw new Error("PIN/password galat hai. Demo ke liye 1234 likhein ya 'Demo dekhein' dabayen.");
-    }
-    const now = new Date().toISOString();
     const shopId = uuid();
     const memberId = uuid();
     const shop: Shop = {
@@ -142,6 +109,58 @@ export class LocalRepo implements Repo {
     await d.put("members", member);
     await this.setMeta("session", { shop_id: shopId, member_id: memberId });
     return { shop, member };
+  }
+
+  private async matchOwnerIn(ordered: Shop[], members: Member[], session: Session | null, pin: string): Promise<Member | null> {
+    for (const shop of ordered) {
+      const shopMembers = members.filter((m) => m.shop_id === shop.id);
+      const list =
+        session && session.shop.id === shop.id && shopMembers.some((m) => m.id === session.member.id)
+          ? [session.member, ...shopMembers.filter((m) => m.id !== session.member.id)]
+          : shopMembers;
+      for (const member of list) {
+        if (shop.is_demo && pin === "1234") return member;
+        const ok = hasPassword(shop)
+          ? await verifyPassword(pin, shop.settings.password_hash!, shop.settings.password_salt!)
+          : (await sha256Hex(pin)) === member.user_id;
+        if (ok) return member;
+      }
+    }
+    return null;
+  }
+
+  async signIn(input: { name: string; pin: string; shopName?: string }): Promise<Session> {
+    const d = await this.db();
+    const shops: Shop[] = await d.getAll("shops");
+    const members: Member[] = await d.getAll("members");
+    const norm = (s: string) => s.trim().replace(/\s+/g, " ").toLowerCase();
+    const wanted = input.shopName && input.shopName.trim() ? norm(input.shopName) : "";
+    if (shops.length) {
+      if (!input.pin) throw new Error("PIN ya password likhein.");
+      const session = await this.getSession();
+      if (wanted) {
+        const nameHits = shops.filter((s) => norm(s.name) === wanted);
+        if (!nameHits.length) {
+          return this.birthShop(input);
+        }
+        const member = await this.matchOwnerIn(nameHits, members, session, input.pin);
+        if (member) {
+          const shop = shops.find((s) => s.id === member.shop_id) ?? nameHits[0];
+          await this.setMeta("session", { shop_id: shop.id, member_id: member.id });
+          return { shop, member };
+        }
+        throw new Error("PIN/password galat hai — is naam ki dukaan pehle se mojood hai. Wohi password daalein ya naya shop naam likhein.");
+      }
+      const ordered = session ? [session.shop, ...shops.filter((s) => s.id !== session.shop.id)] : shops;
+      const member = await this.matchOwnerIn(ordered, members, session, input.pin);
+      if (member) {
+        const shop = shops.find((s) => s.id === member.shop_id)!;
+        await this.setMeta("session", { shop_id: shop.id, member_id: member.id });
+        return { shop, member };
+      }
+      throw new Error("PIN/password galat hai. Demo ke liye 1234 likhein ya 'Demo dekhein' dabayen.");
+    }
+    return this.birthShop(input);
   }
 
   async signOut(): Promise<void> {
